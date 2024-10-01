@@ -1,6 +1,6 @@
 import pandas as pd
 
-def extract_data(csv_file: str):
+def extract_data(csv_file):
     try:
         data = pd.read_csv(csv_file)
         return data
