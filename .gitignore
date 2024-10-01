@@ -1,3 +1,6 @@
+#Venv
+myvenv/
+
 # Terraform
 .terraform/
 terraform.tfstate
