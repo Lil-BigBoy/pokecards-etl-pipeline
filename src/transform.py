@@ -1,10 +1,9 @@
-import pandas as pd
-from etl import extract_data  # Import the extract_data function
+from src.extract import extract_data
 
-def transform_data(csv_file):
+def transform_data(dataframe):
     try:
         # Use the existing function to extract data
-        data = extract_data(csv_file)
+        data = extract_data(dataframe)
 
         # Check if data was successfully extracted
         if data is not None:
