@@ -181,5 +181,3 @@ weekly_order_df = generate_weekly_delivery()
 
 # Save the order
 save_weekly_delivery(weekly_order_df, orders_received)
-
-# Call to trigger controller
