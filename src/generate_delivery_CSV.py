@@ -123,16 +123,44 @@ def get_price(rarity):
 # Create DataFrame
 def generate_weekly_delivery():
     data = []
+    pricelist_path = os.path.join('supplier_pricing', 'price_list.csv')
+    
+    # Load the price list into a DataFrame
+    if os.path.exists(pricelist_path):
+        pricelist_df = pd.read_csv(pricelist_path)
+    else:
+        pricelist_df = pd.DataFrame(columns=['Card', 'Product ID', 'Cost'])
     for idx, card in enumerate(base_set_cards, start=1):
-        price = get_price(card["rarity"])
+        
+
+        matching_card = pricelist_df[pricelist_df['Card'] == card['name']]
+        
+        if not matching_card.empty:
+            # Use the existing price from pricelist
+            price = matching_card['Cost'].values[0]
+        else:
+            # Generate new price if card is not found
+            price = get_price(card['rarity'])
+            # Append the new card and price to the pricelist DataFrame
+            new_entry = pd.DataFrame({
+                'Product ID': [f"{idx:03}"], 
+                'Card': [card['name']],
+                'Set': 'Base Set', # CHANGE HOW THIS IS IMPLEMENTED
+                'Cost': [price]
+            })
+            pricelist_df = pd.concat([pricelist_df, new_entry], ignore_index=True)
+            # Save the updated pricelist to CSV
+            pricelist_df.to_csv(pricelist_path, index=False)
+
+
         orderQuantity = random.randint(10, 30) if card["rarity"] == "Common" else random.randint(30, 50) if card["rarity"] == "Uncommon" else random.randint(10, 30)
 
         total_cost = round(price * orderQuantity, 2)
         data.append({
-            "Product ID": f"{idx:03}",
+            "Product ID": f"CC{idx + 516:04}",
             "Card": card["name"],
             "Card Type": card["type"],
-            "Card Set": "Base Set",
+            "Card Set": "Base Set", # CHANGE HOW THIS IS IMPLEMENTED WITH ADDITIONAL CARD SETS (e.g. make outer loop for sets where set name is ripped from the global variable name and altered accordingly)
             "Rarity": card["rarity"],
             "Cost": price,
             "Quantity": orderQuantity,

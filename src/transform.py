@@ -4,11 +4,11 @@ def transform_data(dataframe):
     if dataframe is not None:
         try:
             # Convert the DataFrame to JSON format
-            json_data = dataframe.to_json(orient='records', lines=True)
+            json_data = dataframe.to_json(orient='records')
             return json_data
         except Exception as e:
             print(f"Error transforming data: {e}")
             return None
     else:
-            print("No data to transform.")
-            return None
+        print("No data to transform.")
+        return None
